@@ -3,10 +3,11 @@
  * 
  * Initial points: A(0,4), B(3,4), C(4,0), D(0,0)
  * Translation: +2 in X, +2 in Y  →  A'(2,6), B'(5,6), C'(6,2), D'(2,2)
- * Rotation: 55° about the origin applied to the translated figure.
  * 
- * Final rotated figure is drawn with a green border and cream fill.
- * Axes are drawn with labeled tick marks (scaled) and 'X'/'Y' labels.
+ * INSTRUCTION (ii): The translated figure is drawn with a GREEN border and CREAM inner shading.
+ * INSTRUCTION (iii): The translated figure is then rotated by 55° about the origin; the rotated figure is shown.
+ * 
+ * Axes are drawn with labelled tick marks and 'X'/'Y' labels.
  */
 
 #ifdef __APPLE__
@@ -18,7 +19,6 @@
 #include <cmath>
 #include <cstdio>
 #include <cstring>
-#include <iostream>
 
 #define PI 3.14159265358979323846
 
@@ -44,7 +44,8 @@ const float ty = 2.0f;
 const float theta_deg = 55.0f;
 float theta_rad;
 
-// Function to compute translated coordinates
+// -------------------------------------------------------------------
+// Compute translated coordinates
 void computeTranslated() {
     for (int i = 0; i < 4; i++) {
         translated[i][0] = original[i][0] + tx;
@@ -52,7 +53,7 @@ void computeTranslated() {
     }
 }
 
-// Function to compute rotated coordinates (rotate translated vertices about origin)
+// Compute rotated coordinates (rotate translated vertices about origin)
 void computeRotated() {
     float cosTheta = cos(theta_rad);
     float sinTheta = sin(theta_rad);
@@ -64,10 +65,11 @@ void computeRotated() {
     }
 }
 
+// -------------------------------------------------------------------
 // Draw a filled polygon with a border
 void drawPolygon(float vertices[4][2], float fillR, float fillG, float fillB,
                  float borderR, float borderG, float borderB, float lineWidth = 2.0f) {
-    // Fill (cream interior)
+    // Fill
     glColor3f(fillR, fillG, fillB);
     glBegin(GL_POLYGON);
     for (int i = 0; i < 4; i++) {
@@ -75,7 +77,7 @@ void drawPolygon(float vertices[4][2], float fillR, float fillG, float fillB,
     }
     glEnd();
 
-    // Border (green outline)
+    // Border
     glColor3f(borderR, borderG, borderB);
     glLineWidth(lineWidth);
     glBegin(GL_LINE_LOOP);
@@ -93,38 +95,35 @@ void drawString(float x, float y, const char* str) {
     }
 }
 
+// -------------------------------------------------------------------
 // Draw labelled axes with tick marks and scaling
 void drawAxesWithLabels() {
     glColor3f(0.8f, 0.8f, 0.8f);   // Light gray axes
     glLineWidth(1.5f);
 
-    // Draw X and Y axes
+    // X and Y axes
     glBegin(GL_LINES);
-    // X axis
     glVertex2f(-8.0f, 0.0f);
     glVertex2f(8.0f, 0.0f);
-    // Y axis
     glVertex2f(0.0f, -2.0f);
     glVertex2f(0.0f, 10.0f);
     glEnd();
 
-    // Draw arrow heads (simple triangles)
+    // Arrow heads
     glBegin(GL_TRIANGLES);
-    // X-axis arrow
     glVertex2f(7.8f, 0.15f);
     glVertex2f(8.0f, 0.0f);
     glVertex2f(7.8f, -0.15f);
-    // Y-axis arrow
     glVertex2f(-0.15f, 9.8f);
     glVertex2f(0.0f, 10.0f);
     glVertex2f(0.15f, 9.8f);
     glEnd();
 
-    // Draw tick marks and numbers
+    // Tick marks and numbers
     char label[10];
-    // X-axis ticks from -7 to 7
+    // X-axis ticks -7 to 7
     for (int x = -7; x <= 7; x++) {
-        if (x == 0) continue; // origin tick already handled
+        if (x == 0) continue;
         glBegin(GL_LINES);
         glVertex2f(x, -0.1f);
         glVertex2f(x, 0.1f);
@@ -132,7 +131,7 @@ void drawAxesWithLabels() {
         sprintf(label, "%d", x);
         drawString(x - 0.2f, -0.4f, label);
     }
-    // Y-axis ticks from -1 to 9
+    // Y-axis ticks -1 to 9
     for (int y = -1; y <= 9; y++) {
         if (y == 0) continue;
         glBegin(GL_LINES);
@@ -142,7 +141,7 @@ void drawAxesWithLabels() {
         sprintf(label, "%d", y);
         drawString(0.15f, y - 0.15f, label);
     }
-    // Tick at origin (0,0)
+    // Origin tick
     glBegin(GL_LINES);
     glVertex2f(-0.1f, 0.0f);
     glVertex2f(0.1f, 0.0f);
@@ -151,19 +150,20 @@ void drawAxesWithLabels() {
     glEnd();
     drawString(-0.3f, -0.4f, "0");
 
-    // Axis labels 'X' and 'Y'
+    // Axis labels
     drawString(7.6f, -0.5f, "X");
     drawString(0.15f, 9.6f, "Y");
 }
 
+// -------------------------------------------------------------------
 // Display callback
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Draw labelled axes
+    // Draw axes
     drawAxesWithLabels();
 
-    // (Optional) Draw original shape (faint dashed) for reference – comment if not needed
+    // (Optional) Original shape – faint dashed for reference
     glEnable(GL_LINE_STIPPLE);
     glLineStipple(1, 0x00FF);
     glColor3f(0.5f, 0.5f, 0.5f);
@@ -175,38 +175,39 @@ void display() {
     glEnd();
     glDisable(GL_LINE_STIPPLE);
 
-    // Draw translated shape (light blue dashed) – optional reference
-    glEnable(GL_LINE_STIPPLE);
-    glLineStipple(1, 0x00FF);
-    glColor3f(0.5f, 0.8f, 1.0f);
-    glBegin(GL_LINE_LOOP);
-    for (int i = 0; i < 4; i++) {
-        glVertex2f(translated[i][0], translated[i][1]);
-    }
-    glEnd();
-    glDisable(GL_LINE_STIPPLE);
+    // -----------------------------------------------------------------
+    // INSTRUCTION (ii): Translated figure with GREEN border and CREAM fill
+    // Cream colour: RGB(255, 253, 208) -> (1.0, 0.992, 0.816)
+    drawPolygon(translated,
+                1.0f, 0.992f, 0.816f,   // cream fill
+                0.0f, 1.0f, 0.0f,       // green border
+                2.5f);                  // border width
+    // -----------------------------------------------------------------
 
-    // Draw the rotated figure (final result) with green border and cream inner shading
-    // Cream color: RGB(255, 253, 208) -> (1.0, 0.992, 0.816)
-    drawPolygon(rotated, 1.0f, 0.992f, 0.816f,    // cream fill
-                0.0f, 1.0f, 0.0f,                // green border
-                2.5f);                           // border width
+    // -----------------------------------------------------------------
+    // INSTRUCTION (iii): Rotated figure (translated figure rotated by 55°)
+    // No specific styling requested – using red border + light transparent-like fill
+    drawPolygon(rotated,
+                1.0f, 0.9f, 0.8f,       // light peach fill
+                1.0f, 0.0f, 0.0f,       // red border
+                2.0f);
+    // -----------------------------------------------------------------
 
     glutSwapBuffers();
 }
 
-// Reshape callback: set orthographic projection
+// Reshape callback
 void reshape(int w, int h) {
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    // World coordinates: x in [-8, 8], y in [-2, 10]
+    // World coordinates: x in [-8, 8], y in [-2, 10] – properly scaled
     gluOrtho2D(-8.0, 8.0, -2.0, 10.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
 
-// Print coordinate information to console
+// Print coordinates to console
 void printCoordinates() {
     printf("===== Coordinate Information =====\n");
     printf("Original points:\n");
@@ -226,31 +227,29 @@ void printCoordinates() {
     printf("==================================\n");
 }
 
+// -------------------------------------------------------------------
 int main(int argc, char** argv) {
     // Convert rotation angle to radians
     theta_rad = theta_deg * PI / 180.0;
 
-    // Compute transformed coordinates
+    // Compute transformations
     computeTranslated();
     computeRotated();
 
     // Print coordinates to console
     printCoordinates();
 
-    // Initialize GLUT
+    // GLUT initialisation
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(800, 600);
-    glutCreateWindow("OpenGL: Translation + Rotation (55°) with Labeled Axes");
+    glutCreateWindow("OpenGL: Translation (green/cream) + Rotation (55°)");
 
-    // Set clear color (dark background for contrast)
     glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
 
-    // Register callbacks
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
 
-    // Start main loop
     glutMainLoop();
     return 0;
 }
