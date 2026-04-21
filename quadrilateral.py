@@ -1,3 +1,10 @@
+#DONE BY GROUP 11
+#SCT211-0435/2023
+#SCT211-0544/2022
+
+#python quadrilateral.py
+
+
 #!/usr/bin/env python3
 # OpenGL Program: Translation + Rotation of a Quadrilateral (Python version)
 #

@@ -1,4 +1,10 @@
 /*
+#DONE BY GROUP 11
+#SCT211-0435/2023
+#SCT211-0544/2022
+
+g++ quadrilateral.cpp -o app.exe -I C:\MinGW\include -L C:\MinGW\lib -lfreeglut -lopengl32 -lglu32
+
  * OpenGL Program: Translation + Rotation of a Quadrilateral
  * 
  * Initial points: A(0,4), B(3,4), C(4,0), D(0,0)
